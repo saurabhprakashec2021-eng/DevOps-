@@ -1,0 +1,64 @@
+#!/bin/bash 
+echo "=========Displaying System information=========="
+echo " Hostname: "
+ hostname
+echo "Current user: "
+ whoami 
+echo "Current date and time: " 
+date 
+echo "System uptime: " 
+uptime
+echo "==============================================="
+read -p "Enter name of directory: " directory 
+mkdir -p "$directory"
+cd $directory 
+for sub_dir in $(seq 1 4)
+do
+read -p "Enter name of subdirectory" sub_dir
+mkdir -p "$sub_dir"
+echo "$sub_dir"
+done 
+echo "===============Directory and subdirectories have been created=============="
+echo "=====================Health Check Report========================="
+echo "CPU usage and uptime"
+uptime 
+echo "Memory Usage"
+free -h 
+echo "Disk usage"
+usage=$(df / | awk 'NR==2{print $5}'|tr -d '%')
+echo $usage
+echo "Top 5 CPU consuming process"
+ps --sort=-pcpu | head -n 6
+echo "Top 5 memory consuming process"
+ps --sort=-pmem | head -n 6
+echo "Logged in users"
+w 
+echo "Finding and backing up all log files..."
+find /home/user -type f -name "*.log" -exec cp {} ~/Maintenance_Report/backups/ \;
+tar -cjvf arc.tar.bz2 ~/Maintenance_Report/archive/
+backup_status=$?
+echo "================= File Automation Completed================"
+echo "============Backup Logs================"
+read -p "Enter a log file name" log_file 
+echo "Script started at $(date)">"$log_file" 
+read -p "Do you want to remove backup(yes/no)?" option 
+if [ "$option" = "yes" ]
+then 
+echo "Running cleanup"
+find . -name "*.gz" -type f -mtime +7 -delete
+else
+echo "Cleanup Skipped"
+fi 
+echo "===============Final Report================"
+echo "Total number of files backed:arc.tar.bz2"
+echo " $(ls ~/Maintenance_Report/backups/ | wc -l) "
+echo "Archive name created:arc.tar.bz2"
+echo "Report location:~/Maintenance_Report/archive"
+if [ "$backup_status" -eq 0 ]
+then 
+echo "Script completed at $(date)-success" >> "$log_file"
+exit 0
+else
+echo "Script failed at $(date)-failure" >> "$log_file"
+exit 1
+fi
