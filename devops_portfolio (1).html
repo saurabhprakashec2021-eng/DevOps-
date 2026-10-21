@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saurabh Prakash | DevOps Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0; /* Slate 200 */
+        }
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        .terminal-shadow {
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.1), 0 2px 4px -1px rgba(16, 185, 129, 0.06);
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 z-50 transform transition-transform duration-300 translate-x-full opacity-0 glass-panel border-l-4 border-green-500 text-white px-6 py-4 rounded shadow-lg flex items-center space-x-3">
+        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toast-message" class="font-medium"></span>
+    </div>
+
+    <!-- Header / Hero -->
+    <header class="pt-20 pb-16 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAzNHYtNGgtMnY0aC00djJoNHY0aDJ2LTRoNHYtMmgtNHptMC0zMFYwaC0ydjRoLTR2Mmg0djRoMnYtNGg0VjJoLTR6bS0yMCAwdjRINTV2Mmg0VjRoLTRWMkgxNnptMjAgNTJ2LTRoLTJ2NGgtNHYyaDR2NGgydi00aDR2LTJoLTR6TTE2IDUydjRIMHYyaDR2NGgydi00aDR2LTJIMTZ6bS04LTE0di00SDZ2NGgtNHYyaDR2NGgydi00aDR2LTJIOHptMC0zMFY0SDZ2NGgtNHYyaDR2NGgyVi44Szh6IiBmaWxsPSIjMzM0MTU1IiBmaWxsLW9wYWNpdHk9IjAuMSIgLz48L2c+PC9zdmc+')] opacity-20 pointer-events-none"></div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-4 text-white">
+                <span class="text-green-400 font-mono text-3xl md:text-4xl block mb-2">~$ whoami</span>
+                Saurabh Prakash
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-400 font-light mb-8">Cloud & DevOps Specialist</p>
+            <div class="flex justify-center gap-4">
+                <a href="#projects" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md font-mono text-sm transition-colors shadow-lg shadow-green-500/20">View Projects</a>
+                <a href="#add-project" class="glass-panel hover:bg-slate-800 text-slate-300 px-6 py-3 rounded-md font-mono text-sm transition-colors border-slate-600">Add Project</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-5xl mx-auto px-6 pb-24 space-y-24">
+        
+        <!-- Interactive Terminal Section -->
+        <section id="terminal-section" class="glass-panel rounded-xl mb-12 terminal-shadow overflow-hidden flex flex-col h-[350px] bg-[#0a0f18] border-slate-600">
+            <!-- Terminal Header -->
+            <div class="bg-slate-900/80 px-4 py-3 flex items-center border-b border-slate-700">
+                <div class="flex gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <div class="flex-1 text-center text-xs font-mono text-slate-400">saurabh@devops-node:~</div>
+            </div>
+            
+            <!-- Terminal Body -->
+            <div class="flex-1 p-4 flex flex-col overflow-hidden relative cursor-text" onclick="document.getElementById('terminal-input').focus()">
+                <div id="terminal-output" class="flex-1 overflow-y-auto font-mono text-sm sm:text-base space-y-1 pb-2">
+                    <div class="text-slate-300 mb-2">Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.0-76-generic x86_64)</div>
+                    <div class="text-slate-300 mb-4"> * Documentation:  <a href="#" class="text-blue-400 hover:underline">https://help.ubuntu.com</a></div>
+                    <div class="text-green-400 mb-2">DevOps Interactive Portfolio Terminal v1.0.0</div>
+                    <div class="text-slate-400 mb-4">Type <span class="text-yellow-300">'help'</span> to see available commands.</div>
+                </div>
+                
+                <!-- Terminal Input Line -->
+                <div class="flex items-center font-mono text-sm sm:text-base mt-2 shrink-0 pb-2">
+                    <span class="mr-2 text-green-400 font-bold">saurabh@portfolio</span><span class="text-slate-300 mr-2">:</span><span class="text-blue-400 mr-2">~</span><span class="text-slate-300 mr-2">$</span>
+                    <input type="text" id="terminal-input" class="flex-1 bg-transparent border-none outline-none text-slate-200 focus:ring-0 p-0 m-0 caret-slate-200" autocomplete="off" spellcheck="false">
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="glass-panel rounded-xl p-8 md:p-10 terminal-shadow">
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-700 pb-4">
+                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                <h2 class="text-2xl font-bold text-white">About Me</h2>
+            </div>
+            <div class="prose prose-invert max-w-none text-slate-300 leading-relaxed mb-8">
+                <p>
+                    I am a passionate DevOps Engineer dedicated to automating, streamlining, and optimizing software delivery processes. 
+                    With a strong foundation in modern cloud architectures and infrastructure as code, I bridge the gap between development and operations. 
+                    I am a proud graduate of the <strong class="text-green-400 font-medium">HCL GUVI Advanced DevOps program</strong>, where I honed my skills in building resilient CI/CD pipelines and scalable cloud infrastructure.
+                </p>
+            </div>
+            
+            <h3 class="text-sm font-mono text-slate-400 mb-4 uppercase tracking-wider">Core Arsenal</h3>
+            <div class="flex flex-wrap gap-3">
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-blue-400">Linux</span>
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-yellow-400">Python</span>
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-orange-400">AWS</span>
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-blue-500">Docker</span>
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-blue-600">Kubernetes</span>
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-red-400">CI/CD</span>
+                <span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded-md text-sm font-mono text-purple-400">Terraform</span>
+            </div>
+        </section>
+
+        <!-- Project Showcase -->
+        <section id="projects">
+            <div class="flex items-center justify-between mb-8 border-b border-slate-700 pb-4">
+                <div class="flex items-center gap-3">
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                    <h2 class="text-2xl font-bold text-white">Project Showcase</h2>
+                </div>
+                <div id="loading-indicator" class="flex items-center gap-2 text-slate-400 text-sm font-mono">
+                    <svg class="animate-spin h-4 w-4 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Fetching...
+                </div>
+            </div>
+
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Projects will be dynamically injected here -->
+            </div>
+            
+            <div id="empty-state" class="hidden text-center py-16 glass-panel rounded-xl border border-slate-700 border-dashed">
+                <svg class="w-12 h-12 text-slate-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                <p class="text-slate-400 font-mono">No projects found in the repository.</p>
+                <p class="text-sm text-slate-500 mt-2">Deploy your first project below.</p>
+            </div>
+        </section>
+
+        <!-- Add Project Form -->
+        <section id="add-project" class="glass-panel rounded-xl p-8 md:p-10 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
+            <div class="flex items-center gap-3 mb-8">
+                <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                <h2 class="text-2xl font-bold text-white">Deploy New Project</h2>
+            </div>
+
+            <form id="project-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="title" class="block text-sm font-medium text-slate-400 font-mono">Project Title *</label>
+                        <input type="text" id="title" required class="w-full bg-slate-900/50 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all placeholder-slate-600" placeholder="e.g. K8s Cluster Automation">
+                    </div>
+                    <div class="space-y-2">
+                        <label for="link" class="block text-sm font-medium text-slate-400 font-mono">GitHub / Demo URL</label>
+                        <input type="url" id="link" class="w-full bg-slate-900/50 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all placeholder-slate-600" placeholder="https://github.com/yourusername/repo">
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="tech" class="block text-sm font-medium text-slate-400 font-mono">Tech Stack (comma separated) *</label>
+                    <input type="text" id="tech" required class="w-full bg-slate-900/50 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all placeholder-slate-600" placeholder="e.g. Docker, Jenkins, AWS EKS, Terraform">
+                </div>
+
+                <div class="space-y-2">
+                    <label for="description" class="block text-sm font-medium text-slate-400 font-mono">Description *</label>
+                    <textarea id="description" rows="4" required class="w-full bg-slate-900/50 border border-slate-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all placeholder-slate-600 resize-none" placeholder="Describe the architecture, problem solved, and implementation details..."></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full md:w-auto bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-md font-mono text-sm transition-colors flex items-center justify-center gap-2 group">
+                    <span>Execute Deployment</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-800 py-8 text-center text-slate-500 font-mono text-sm">
+        <p>System Online. Built by Saurabh Prakash.</p>
+    </footer>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Configuration Variables provided by environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'devops-portfolio-demo';
+        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
+        
+        let app, db, auth;
+        let currentUser = null;
+
+        // UI Elements
+        const form = document.getElementById('project-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const projectsGrid = document.getElementById('projects-grid');
+        const emptyState = document.getElementById('empty-state');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        function showToast(message, isError = false) {
+            toastMessage.textContent = message;
+            toast.className = `fixed top-4 right-4 z-50 transform transition-transform duration-300 glass-panel border-l-4 px-6 py-4 rounded shadow-lg flex items-center space-x-3 ${isError ? 'border-red-500 text-white' : 'border-green-500 text-white'}`;
+            
+            // Slide in
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full', 'opacity-0');
+            }, 10);
+
+            // Slide out
+            setTimeout(() => {
+                toast.classList.add('translate-x-full', 'opacity-0');
+            }, 3000);
+        }
+
+        async function initFirebase() {
+            try {
+                const config = JSON.parse(firebaseConfigStr);
+                if (!Object.keys(config).length) {
+                    throw new Error("Firebase config missing. Running in UI-only mode.");
+                }
+
+                app = initializeApp(config);
+                db = getFirestore(app);
+                auth = getAuth(app);
+
+                // Authentication
+                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (token) {
+                    await signInWithCustomToken(auth, token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                currentUser = auth.currentUser;
+                console.log("Authenticated as:", currentUser.uid);
+                
+                setupRealtimeListener();
+
+            } catch (error) {
+                console.warn("Firebase Init Error:", error);
+                loadingIndicator.style.display = 'none';
+                emptyState.classList.remove('hidden');
+                emptyState.innerHTML = `<p class="text-red-400 font-mono">Database connection offline. ${error.message}</p>`;
+            }
+        }
+
+        function createProjectCard(project) {
+            const tagsHtml = project.techStack
+                .map(tech => `<span class="px-2 py-1 bg-slate-900 border border-slate-700 rounded text-xs font-mono text-slate-300">${tech.trim()}</span>`)
+                .join('');
+
+            const linkHtml = project.link ? `
+                <a href="${project.link}" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:text-green-300 flex items-center gap-1 text-sm font-mono mt-4 transition-colors w-fit">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    Source / Demo
+                </a>
+            ` : '';
+
+            const dateStr = project.createdAt ? new Date(project.createdAt.toMillis()).toLocaleDateString() : 'Just now';
+
+            return `
+                <div class="glass-panel p-6 rounded-xl border border-slate-700 hover:border-slate-500 transition-all flex flex-col h-full group">
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-green-400 transition-colors">${project.title}</h3>
+                        <span class="text-xs text-slate-500 font-mono">${dateStr}</span>
+                    </div>
+                    <p class="text-slate-400 text-sm mb-6 flex-grow leading-relaxed">${project.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        ${tagsHtml}
+                    </div>
+                    ${linkHtml}
+                </div>
+            `;
+        }
+
+        function setupRealtimeListener() {
+            if (!currentUser) return;
+            
+            // Strict Path Rule: /artifacts/{appId}/public/data/projects
+            const projectsRef = collection(db, 'artifacts', appId, 'public', 'data', 'projects');
+            
+            // Simple query, sorting in memory
+            const q = query(projectsRef);
+
+            onSnapshot(q, (snapshot) => {
+                loadingIndicator.style.display = 'none';
+                projectsGrid.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+                
+                emptyState.classList.add('hidden');
+                
+                const projects = [];
+                snapshot.forEach((doc) => {
+                    projects.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Sort by date descending in memory to avoid index requirements
+                projects.sort((a, b) => {
+                    const timeA = a.createdAt ? a.createdAt.toMillis() : Date.now();
+                    const timeB = b.createdAt ? b.createdAt.toMillis() : Date.now();
+                    return timeB - timeA;
+                });
+
+                projects.forEach(project => {
+                    projectsGrid.innerHTML += createProjectCard(project);
+                });
+            }, (error) => {
+                console.error("Error fetching projects:", error);
+                loadingIndicator.style.display = 'none';
+                showToast("Failed to sync datastore.", true);
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser || !db) {
+                showToast("System offline. Cannot deploy project.", true);
+                return;
+            }
+
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.innerHTML = `<svg class="animate-spin h-5 w-5 mr-2 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Deploying...`;
+            submitBtn.disabled = true;
+
+            const title = document.getElementById('title').value.trim();
+            const link = document.getElementById('link').value.trim();
+            const techString = document.getElementById('tech').value;
+            const description = document.getElementById('description').value.trim();
+
+            const techStack = techString.split(',').map(item => item.trim()).filter(item => item !== '');
+
+            try {
+                const projectsRef = collection(db, 'artifacts', appId, 'public', 'data', 'projects');
+                await addDoc(projectsRef, {
+                    title,
+                    link,
+                    techStack,
+                    description,
+                    createdAt: serverTimestamp(),
+                    ownerId: currentUser.uid
+                });
+
+                form.reset();
+                showToast("Deployment successful!");
+            } catch (error) {
+                console.error("Error adding project:", error);
+                showToast("Deployment failed. See console.", true);
+            } finally {
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            initFirebase();
+        });
+
+        // --- Interactive Terminal Logic ---
+        const termInput = document.getElementById('terminal-input');
+        const termOutput = document.getElementById('terminal-output');
+
+        function printToTerminal(content, isCommand = false) {
+            const line = document.createElement('div');
+            if (isCommand) {
+                // Formatting for the echoed command
+                line.innerHTML = `<span class="mr-2 text-green-400 font-bold">saurabh@portfolio</span><span class="text-slate-300 mr-2">:</span><span class="text-blue-400 mr-2">~</span><span class="text-slate-300 mr-2">$</span><span class="text-slate-200">${content}</span>`;
+                line.className = "mt-2 mb-1";
+            } else {
+                // Formatting for the command output
+                line.className = "text-slate-300 mb-3 whitespace-pre-wrap";
+                line.innerHTML = content;
+            }
+            termOutput.appendChild(line);
+            termOutput.scrollTop = termOutput.scrollHeight;
+        }
+
+        termInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmdString = this.value.trim();
+                this.value = ''; // Clear input
+                
+                if (cmdString === '') return;
+                
+                // Echo the command
+                printToTerminal(cmdString, true);
+                
+                // Parse command
+                const args = cmdString.split(/\s+/);
+                const cmd = args[0].toLowerCase();
+
+                switch(cmd) {
+                    case 'help':
+                        printToTerminal(
+                            `<span class="text-yellow-300">whoami</span>   - print effective user name\n` +
+                            `<span class="text-yellow-300">ls</span>       - list directory contents\n` +
+                            `<span class="text-yellow-300">pwd</span>      - print name of current/working directory\n` +
+                            `<span class="text-yellow-300">clear</span>    - clear the terminal screen\n` +
+                            `<span class="text-yellow-300">help</span>     - display this help and exit`
+                        );
+                        break;
+                    case 'whoami':
+                        printToTerminal('saurabh');
+                        break;
+                    case 'ls':
+                        printToTerminal(
+                            `<div class="flex flex-wrap gap-x-6 gap-y-2 text-blue-400 font-bold mt-1">` +
+                            `<span>aws-scripts/</span>` +
+                            `<span>docker-configs/</span>` +
+                            `<span>guvi-projects/</span>` +
+                            `<span>python-automation/</span>` +
+                            `</div>`
+                        );
+                        break;
+                    case 'pwd':
+                        printToTerminal('/home/saurabh/projects');
+                        break;
+                    case 'clear':
+                        termOutput.innerHTML = '';
+                        break;
+                    case 'sudo':
+                        printToTerminal('Nice try. This incident will be reported.');
+                        break;
+                    default:
+                        printToTerminal(`bash: ${cmd}: command not found`);
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
