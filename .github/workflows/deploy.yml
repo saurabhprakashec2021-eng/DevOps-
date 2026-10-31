@@ -1,0 +1,50 @@
+name: Deploy Portfolio to EC2 (Amazon Linux 2023)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 1: Securely copy files to a staging directory in the user's home folder
+      - name: Copy files to Staging via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }} # Ensure your secret holds 'ec2-user'
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "/home/ec2-user/portfolio-staging"
+          strip_components: 1
+
+      # Step 2: Use SSH to move files to web root, set AL2023 permissions, and restart httpd
+      - name: Deploy to Web Root and Restart HTTPD
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Clear the existing web root to prevent orphaned files
+            sudo rm -rf /var/www/html/*
+            
+            # Move the new files from staging to the web root
+            sudo mv /home/ec2-user/portfolio-staging/* /var/www/html/
+            
+            # Clean up the staging directory and hidden files (.git, etc.)
+            rm -rf /home/ec2-user/portfolio-staging
+            
+            # Set ownership to the default AL2023 Apache user
+            sudo chown -R apache:apache /var/www/html
+            sudo chmod -R 755 /var/www/html
+            
+            # Restart the web server to ensure changes are served
+            sudo systemctl restart httpd
