@@ -1,50 +1,50 @@
-name: Deploy Portfolio to EC2 (Amazon Linux 2023)
+name: Deploy Portfolio to AWS EC2 (Nginx)
 
 on:
   push:
     branches:
-      - main
+      - main # Triggers automatically on push to main
 
 jobs:
-  deploy:
-    name: Deploy to Production
+  deploy-to-nginx:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout Code
+      # Step 1: Pull the latest code into the GitHub Runner
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Step 1: Securely copy files to a staging directory in the user's home folder
-      -  name: Copy files to Staging via SCP
-         uses: appleboy/scp-action@master
-         with:
-               host: ${{ secrets.EC2_HOST }}
-               username: ${{ secrets.EC2_USERNAME }}
-               key: ${{ secrets.EC2_SSH_KEY }}
-               source: "."
-               target: "/home/ec2-user/portfolio-staging"
-               strip_components: 1
+      # Step 2: Securely transfer files to a temporary staging directory on EC2
+      - name: Copy portfolio files via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
+          source: "./*" 
+          target: "/home/${{ secrets.AWS_EC2_USERNAME }}/portfolio_staging"
 
-      # Step 2: Use SSH to move files to web root, set AL2023 permissions, and restart httpd
-      - name: Deploy to Web Root and Restart HTTPD
+      # Step 3: SSH into EC2, sync files to Nginx web root, and apply security permissions
+      - name: Execute deployment commands
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.AWS_EC2_HOST }}
+          username: ${{ secrets.AWS_EC2_USERNAME }}
+          key: ${{ secrets.AWS_EC2_SSH_KEY }}
           script: |
-            # Clear the existing web root to prevent orphaned files
-            sudo rm -rf /var/www/html/*
+            # Sync files from staging to the Nginx document root
+            sudo rsync -av /home/${{ secrets.AWS_EC2_USERNAME }}/portfolio_staging/ /var/www/html/
             
-            # Move the new files from staging to the web root
-            sudo mv /home/ec2-user/portfolio-staging/* /var/www/html/
+            # Remove the temporary staging directory
+            rm -rf /home/${{ secrets.AWS_EC2_USERNAME }}/portfolio_staging
             
-            # Clean up the staging directory and hidden files (.git, etc.)
-            rm -rf /home/ec2-user/portfolio-staging
+            # Assign ownership to the Nginx user (www-data)
+            sudo chown -R www-data:www-data /var/www/html/
             
-            # Set ownership to the default AL2023 Apache user
-            sudo chown -R apache:apache /var/www/html
-            sudo chmod -R 755 /var/www/html
+            # Apply strict principle-of-least-privilege permissions
+            sudo find /var/www/html/ -type d -exec chmod 755 {} \; # Directories: Read/Execute
+            sudo find /var/www/html/ -type f -exec chmod 644 {} \; # Files: Read Only
             
-            # Restart the web server to ensure changes are served
-            sudo systemctl restart httpd
+            # Reload Nginx gracefully without dropping active connections
+            sudo systemctl reload nginx
+            
